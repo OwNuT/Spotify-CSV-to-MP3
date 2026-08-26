@@ -4,7 +4,7 @@ Un outil Python ultra-simple et cross-platform (Windows, macOS, Linux) pour conv
 
 ## 🌟 Fonctionnalités Principales
 
-* Système d'historique anti-doublons (100% fiable) : Génère un fichier downloaded_history.txt basé directement sur les lignes exactes du CSV. Même si YouTube renomme le fichier MP3 différemment, le script saura que le titre a déjà été traité et le sautera (0ms de requête réseau).
+* Système d'historique anti-doublons : Génère un fichier downloaded_history.txt basé directement sur les lignes exactes du CSV. Même si YouTube renomme le fichier MP3 différemment, le script saura que le titre a déjà été traité et le sautera (0ms de requête réseau).
 * Double vérification locale : Analyse également les fichiers .mp3 déjà présents dans le dossier de destination pour éviter les téléchargements redondants.
 * Pause automatique Anti-Rate-Limit (HTTP 429) : Si YouTube temporise votre adresse IP après une série de requêtes, le script entre automatiquement en pause de sécurité pendant 60 secondes avant de reprendre tout seul.
 * Parseur CSV universel : Compatible avec les exports d'Exportify (séparateurs "," ou ";").
