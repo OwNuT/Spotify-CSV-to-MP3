@@ -1,140 +1,135 @@
-# 🎵 Spotify CSV to MP3 Downloader
+# 🎵 Spotify CSV to MP3 Downloader (Python Edition)
 
-An automated Bash script to download tracks from any Spotify playlist as high-quality MP3s via YouTube search, completely bypassing restricted Spotify API endpoints.
+A fully cross-platform Python application to convert exported Spotify playlists into high-quality `.mp3` files via YouTube matching. 
 
-![Bash](https://img.shields.io/badge/Language-Bash-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white)
+Works natively on **Windows**, **macOS**, and **Linux**.
+
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Windows%20|%20macOS%20|%20Linux-lightgray?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 ---
 
-## 🌟 Features
+## 🌟 Key Features
 
-* **No Spotify API Limits:** Works with public, private, or third-party playlists via simple CSV exports.
-* **Smart Local Duplicate Skip:** Checks for already downloaded tracks on your disk before hitting the network, saving requests and preventing unnecessary API spam.
-* **Rate-Limit Cooldown & Auto-Resume:** Automatically detects YouTube HTTP 429 / Captcha anti-bot blocks, pauses execution during a 60-second cooldown period, and safely resumes downloading.
-* **Browser Cookies Support (`--browser`):** Bypass YouTube IP rate limits seamlessly by leveraging session cookies from your local browser (Firefox, Chrome, Brave, Edge).
-* **Automatic YouTube Match:** Searches and matches titles using `yt-dlp` (`ytsearch1:` engine).
-* **Smart CSV Parsing:** Python-powered header detection (compatible with Exportify, custom CSVs, separated by commas or semicolons).
-* **High Quality Audio:** Extracts and converts streams directly into high-quality MP3s via `ffmpeg`.
-* **Rich Terminal UI:** Color-coded console feedback, progress tracking, verbose mode, proxy support, and graceful `CTRL+C` cleanup.
-* **Robust Logging:** Built-in logging system keeping full trace of operations and failures under `./logs/`.
+* **100% Cross-Platform:** Native execution on Windows, macOS, and Linux without Bash dependencies.
+* **Instant Resume & Zero-Network Duplicate Skip:** Scans local directory before making network calls. Skipping local files takes 0ms and saves network quota.
+* **Smart Anti-Rate-Limit & Auto-Cooldown:** Automatically catches HTTP 429 / Captcha errors from YouTube, pauses execution for 60 seconds, and attempts retry.
+* **Browser Cookies Support (`--browser`):** Uses your native browser session (Chrome, Firefox, Edge, Brave, Opera) to authenticate searches and completely bypass IP rate limits.
+* **Proxy Support (`--proxy`):** Full HTTP, HTTPS, and SOCKS5 proxy support natively integrated.
+* **Auto-Delimiter CSV Parser:** Reads Exportify or custom CSVs (comma or semicolon separated) with UTF-8 BOM protection.
 
 ---
 
-## 📋 Prerequisites & Dependencies
+## 📦 Requirements & Installation
 
-Ensure you have the following installed on your system:
-
-* **`yt-dlp`**: Powerful YouTube downloader.
-* **`ffmpeg`**: Media encoder for audio processing.
-* **`python3`**: Used strictly for native CSV parsing (pre-installed on most UNIX systems).
-
-### Installation Commands
-
-#### Fedora / RHEL
-```bash
-sudo dnf install -y ffmpeg python3
-pip install --user yt-dlp
-```
-
-#### Ubuntu / Debian
-```bash
-sudo apt update
-sudo apt install -y ffmpeg python3 python3-pip
-pip install --user yt-dlp
-```
-
-#### Arch Linux
-```bash
-sudo pacman -S ffmpeg python3 yt-dlp
-```
+### 1. Prerequisites
+* **Python 3.8+**
+* **FFmpeg:** Required for audio extraction to MP3.
 
 ---
 
-## 🚀 Quick Start Guide
+### Windows Setup
 
-### Step 1: Export your Spotify Playlist to CSV
-1. Go to [Exportify](https://exportify.net) and log in with your Spotify Account.
-2. Export your target playlist as a `.csv` file and place it in your working directory.
-
-### Step 2: Clone & Make Executable
-```bash
-git clone [https://github.com/YOUR_USERNAME/spotify-csv-to-mp3.git](https://github.com/YOUR_USERNAME/spotify-csv-to-mp3.git)
-cd spotify-csv-to-mp3
-chmod +x spotify-csv-to-mp3.sh
-```
-
-### Step 3: Run the Script
-```bash
-./spotify-csv-to-mp3.sh ./my_playlist.csv ./music_output
-```
-
----
-
-## 🛡️ Rate Limits & Bypass Strategies
-
-Downloading large playlists (~60+ tracks) in a single run may trigger YouTube's bot prevention mechanism (HTTP Error 429). The script includes built-in safeguards to handle this gracefully:
-
-1. **Automatic Pause & Resume:** If YouTube rate-limits the script mid-process, it will print a warning, wait 60 seconds for the cooldown to pass, and automatically attempt to resume downloading the remaining tracks.
-2. **Browser Authentication (Recommended):** Use the `-b` option to pass session cookies from your logged-in browser. This prevents rate limits entirely:
-   ```bash
-   ./spotify-csv-to-mp3.sh -b firefox playlist.csv
+1. **Install Python:** Download and install Python from [python.org](https://www.python.org/). Ensure you check **"Add Python to PATH"** during installation.
+2. **Install FFmpeg:**
+   * Easiest method via **winget** (PowerShell):
+     ```cmd
+     winget install "FFmpeg (Essential Build)"
+     ```
+   * Or via **Chocolatey**:
+     ```cmd
+     choco install ffmpeg
+     ```
+3. **Install Python Libraries:**
+   ```cmd
+   pip install yt-dlp colorama
    ```
-3. **Instant Resume on Restart:** If you stop the script and restart it later, it skips already downloaded `.mp3` files locally without sending any YouTube search requests.
 
 ---
 
-## ⚙️ Options & Usage
+### Linux / macOS Setup
 
-```text
-Usage: ./spotify-csv-to-mp3.sh [options] <playlist_file.csv> [output_directory]
+* **Ubuntu / Debian:**
+  ```bash
+  sudo apt update && sudo apt install -y python3 python3-pip ffmpeg
+  pip install yt-dlp colorama
+  ```
 
-Options:
-  -b, --browser NAME   Use browser cookies to bypass rate limits (chrome, firefox, brave, edge, opera)
-  -p, --proxy URL      Pass requests through a proxy (e.g. socks5://127.0.0.1:9050)
-  --sleep-min SEC      Minimum sleep delay between requests (Default: 2)
-  --sleep-max SEC      Maximum sleep delay between requests (Default: 5)
-  -v, --verbose        Displays live detailed output from yt-dlp for debugging
-  -q, --quiet          Hides non-critical standard informational messages
-  -h, --help           Shows the command line help page
+* **Fedora:**
+  ```bash
+  sudo dnf install -y python3 python3-pip ffmpeg
+  pip install yt-dlp colorama
+  ```
+
+* **macOS (Homebrew):**
+  ```bash
+  brew install python ffmpeg
+  pip3 install yt-dlp colorama
+  ```
+
+---
+
+## 🚀 Usage
+
+### 1. Export Spotify Playlist
+Export your target playlist to CSV using [Exportify](https://exportify.net).
+
+### 2. Run the Script
+
+**Basic Usage:**
+```bash
+python spotify_to_mp3.py playlist.csv
 ```
 
-### Examples
-
-**Standard Download:**
+**Bypass Rate Limits (Recommended for >50 songs):**
 ```bash
-./spotify-csv-to-mp3.sh playlist.csv
-```
+# Windows / Linux / macOS using Chrome session
+python spotify_to_mp3.py -b chrome playlist.csv ./my_music
 
-**Using Browser Cookies (Anti-Ban / High Volume):**
-```bash
-./spotify-csv-to-mp3.sh -b firefox playlist.csv ~/Music/Spotify
-```
-
-**Using a Proxy (Tor / SOCKS5):**
-```bash
-./spotify-csv-to-mp3.sh -p socks5://127.0.0.1:9050 playlist.csv
-```
-
-**Verbose Mode (Debugging):**
-```bash
-./spotify-csv-to-mp3.sh -v my_playlist.csv
+# Using Firefox session
+python spotify_to_mp3.py -b firefox playlist.csv ./my_music
 ```
 
 ---
 
-## 📂 Project Structure
+## ⚙️ Command Line Options
 
 ```text
-.
-├── spotify-csv-to-mp3.sh  # Main executable script
-├── logs/                  # Detailed execution logs (created automatically)
-├── README.md              # Project documentation
-└── LICENSE                # License information
+positional arguments:
+  csv_file              Path to Spotify CSV export file
+  output_dir            Output directory for MP3s (Default: ./musiques)
+
+options:
+  -h, --help            Show this help message and exit
+  -b, --browser NAME    Extract cookies from browser (chrome, firefox, brave, edge, opera)
+  -p, --proxy URL       Proxy URL (e.g. [http://127.0.0.1:8080](http://127.0.0.1:8080) or socks5://127.0.0.1:9050)
+  --sleep-min SEC       Minimum sleep delay between requests (Default: 2)
+  --sleep-max SEC       Maximum sleep delay between requests (Default: 5)
+  -v, --verbose         Enable verbose logging
 ```
+
+---
+
+## ⚡ Possibilities, Limitations & Windows Caveats
+
+### 1. SOCKS5 Proxies on Windows
+* **SOCKS5 Support:** If you use a SOCKS5 proxy (`socks5://...`), Python requires the `PySocks` package.
+  * **Fix:** Install it via `pip install PySocks`.
+* HTTP/HTTPS proxies (`http://127.0.0.1:8080`) work out-of-the-box on all operating systems without extra packages.
+
+### 2. Browser Cookies Access (`-b` / `--browser`)
+* **Windows Chrome / Edge Lock:** Windows locks browser database files while the browser is open. 
+  * **Fix:** If `--browser chrome` or `--browser edge` fails on Windows, **close your browser entirely** before running the script.
+* **Firefox:** Firefox handles file locking better and usually works even while open.
+
+### 3. YouTube Search Quotas (HTTP 429)
+* **Unauthenticated Requests:** YouTube limits consecutive search requests from a single IP to ~50–60 queries within a short window.
+* **Auto-Cooldown Mechanism:** If blocked, the script will wait 60 seconds automatically before resuming. If left running, it will eventually complete the whole list.
+* **Immediate Resume:** Stopping the script and restarting it is instant: existing `.mp3` files are recognized locally, skipping YouTube requests completely.
 
 ---
 
 ## 📜 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See `LICENSE` for details.
