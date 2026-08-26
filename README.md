@@ -57,7 +57,7 @@ sudo pacman -S ffmpeg python3 yt-dlp
 
 ### Step 2: Clone & Make Executable
 ```bash
-git clone [https://github.com/YOUR_USERNAME/spotify-csv-to-mp3.git](https://github.com/YOUR_USERNAME/spotify-csv-to-mp3.git)
+git clone [https://github.com/OwNuT/spotify-csv-to-mp3.git](https://github.com/OwNuT/spotify-csv-to-mp3.git)
 cd spotify-csv-to-mp3
 chmod +x spotify-csv-to-mp3.sh
 ```
